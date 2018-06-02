@@ -17,4 +17,11 @@ defmodule Rumbl.Accounts.User do
     |> validate_required([:name, :username])
     |> validate_length(:username, min: 1, max: 20)
   end
+
+
+  def registration_changeset(user, attrs) do
+    user
+    |> changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:credential, with: &Credential.changeset/2)
+  end
 end
