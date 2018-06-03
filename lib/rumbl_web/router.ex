@@ -1,4 +1,5 @@
 defmodule RumblWeb.Router do
+  import RumblWeb.Auth, only: [authenticate_user: 2]
   use RumblWeb, :router
 
   pipeline :browser do
@@ -20,6 +21,11 @@ defmodule RumblWeb.Router do
     get "/", PageController, :index
     resources "/users", UserController, only: [:index, :show, :new, :create]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
+  end
+
+  scope "/manage", RumblWeb do
+    pipe_through [:browser, :authenticate_user]
+
     resources "/videos", VideoController
   end
 
