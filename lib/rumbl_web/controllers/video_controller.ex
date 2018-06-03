@@ -4,18 +4,23 @@ defmodule RumblWeb.VideoController do
   alias Rumbl.Multimidia
   alias Rumbl.Multimidia.Video
 
+  def action(conn, _) do
+    args = [conn, conn.params, conn.assigns.current_user]
+    apply(__MODULE__, action_name(conn), args)
+  end
+
   def index(conn, _params) do
     videos = Multimidia.list_videos()
     render(conn, "index.html", videos: videos)
   end
 
-  def new(conn, _params) do
-    changeset = Multimidia.change_video(conn.assigns.current_user, %Video{})
+  def new(conn, _params, current_user) do
+    changeset = Multimidia.change_video(current_user, %Video{})
     render(conn, "new.html", changeset: changeset)
   end
 
-  def create(conn, %{"video" => video_params}) do
-    case Multimidia.create_video(conn.assigns.current_user, video_params) do
+  def create(conn, %{"video" => video_params}, current_user) do
+    case Multimidia.create_video(current_user, video_params) do
       {:ok, video} ->
         conn
         |> put_flash(:info, "Video created successfully.")
