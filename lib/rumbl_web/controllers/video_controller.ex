@@ -10,12 +10,12 @@ defmodule RumblWeb.VideoController do
   end
 
   def new(conn, _params) do
-    changeset = Multimidia.change_video(%Video{})
+    changeset = Multimidia.change_video(conn.assigns.current_user, %Video{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"video" => video_params}) do
-    case Multimidia.create_video(video_params) do
+    case Multimidia.create_video(conn.assigns.current_user, video_params) do
       {:ok, video} ->
         conn
         |> put_flash(:info, "Video created successfully.")
@@ -32,7 +32,7 @@ defmodule RumblWeb.VideoController do
 
   def edit(conn, %{"id" => id}) do
     video = Multimidia.get_video!(id)
-    changeset = Multimidia.change_video(video)
+    changeset = Multimidia.change_video(conn.assigns.current_user, video)
     render(conn, "edit.html", video: video, changeset: changeset)
   end
 
