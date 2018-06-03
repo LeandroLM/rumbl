@@ -6,9 +6,9 @@ defmodule Rumbl.AccountsTest do
   describe "credentials" do
     alias Rumbl.Accounts.Credential
 
-    @valid_attrs %{email: "some email", password_hash: "some password_hash"}
-    @update_attrs %{email: "some updated email", password_hash: "some updated password_hash"}
-    @invalid_attrs %{email: nil, password_hash: nil}
+    @valid_attrs %{email: "some email"}
+    @update_attrs %{email: "some updated email"}
+    @invalid_attrs %{email: nil}
 
     def credential_fixture(attrs \\ %{}) do
       {:ok, credential} =

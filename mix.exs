@@ -1,11 +1,19 @@
+#---
+# Excerpted from "Programming Phoenix 1.4",
+# published by The Pragmatic Bookshelf.
+# Copyrights apply to this code. It may not be used to create training material,
+# courses, books, articles, and the like. Contact us if you are in doubt.
+# We make no guarantees that this code is fit for any purpose.
+# Visit http://www.pragmaticprogrammer.com/titles/phoenix14 for more book information.
+#---
 defmodule Rumbl.Mixfile do
   use Mix.Project
 
   def project do
     [
       app: :rumbl,
-      version: "0.0.1",
-      elixir: "~> 1.4",
+      version: "0.1.0",
+      elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
@@ -33,16 +41,18 @@ defmodule Rumbl.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.3.2"},
+      # TODO bump to 1.4 on release
+      {:phoenix, github: "phoenixframework/phoenix", override: true},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.10"},
+      {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
+      {:jason, "~> 1.0"},
       {:cowboy, "~> 1.0"},
       {:comeonin, "~> 4.1"},
-      {:bcrypt_elixir, "~> 1.0"}
+      {:bcrypt_elixir, "~> 1.0"},
     ]
   end
 

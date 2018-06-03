@@ -1,5 +1,12 @@
+#---
+# Excerpted from "Programming Phoenix 1.4",
+# published by The Pragmatic Bookshelf.
+# Copyrights apply to this code. It may not be used to create training material,
+# courses, books, articles, and the like. Contact us if you are in doubt.
+# We make no guarantees that this code is fit for any purpose.
+# Visit http://www.pragmaticprogrammer.com/titles/phoenix14 for more book information.
+#---
 defmodule RumblWeb.Router do
-  import RumblWeb.Auth, only: [authenticate_user: 2]
   use RumblWeb, :router
 
   pipeline :browser do
@@ -28,9 +35,4 @@ defmodule RumblWeb.Router do
 
     resources "/videos", VideoController
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", RumblWeb do
-  #   pipe_through :api
-  # end
 end

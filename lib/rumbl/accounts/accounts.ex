@@ -1,9 +1,7 @@
 defmodule Rumbl.Accounts do
   @moduledoc """
-  The Accounts context
+  The Accounts context.
   """
-
-  import Ecto.Query
 
   alias Rumbl.Accounts.User
   alias Rumbl.Repo
@@ -13,12 +11,14 @@ defmodule Rumbl.Accounts do
   end
 
   def get_user!(id) do
-    Repo.get!(User, id)
+    Repo.get(User, id)
   end
 
   def get_user_by(params) do
     Repo.get_by(User, params)
   end
+
+  import Ecto.Query
 
   def get_user_by_email(email) do
     from(u in User, join: c in assoc(u, :credential), where: c.email == ^email)
@@ -37,11 +37,12 @@ defmodule Rumbl.Accounts do
         {:error, :unauthorized}
 
       true ->
+        Comeonin.Bcrypt.dummy_checkpw()
         {:error, :not_found}
     end
   end
 
-  def list_users() do
+  def list_users do
     Repo.all(User)
   end
 
@@ -55,7 +56,7 @@ defmodule Rumbl.Accounts do
     |> Repo.insert()
   end
 
-  def register_user(attrs) do
+  def register_user(attrs \\ %{}) do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()

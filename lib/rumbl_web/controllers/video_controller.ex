@@ -14,22 +14,6 @@ defmodule RumblWeb.VideoController do
     render(conn, "index.html", videos: videos)
   end
 
-  def new(conn, _params, current_user) do
-    changeset = Multimidia.change_video(current_user, %Video{})
-    render(conn, "new.html", changeset: changeset)
-  end
-
-  def create(conn, %{"video" => video_params}, current_user) do
-    case Multimidia.create_video(current_user, video_params) do
-      {:ok, video} ->
-        conn
-        |> put_flash(:info, "Video created successfully.")
-        |> redirect(to: video_path(conn, :show, video))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-    end
-  end
-
   def show(conn, %{"id" => id}, current_user) do
     video = Multimidia.get_user_video!(current_user, id)
     render(conn, "show.html", video: video)
@@ -48,7 +32,8 @@ defmodule RumblWeb.VideoController do
       {:ok, video} ->
         conn
         |> put_flash(:info, "Video updated successfully.")
-        |> redirect(to: video_path(conn, :show, video))
+        |> redirect(to: Routes.video_path(conn, :show, video))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", video: video, changeset: changeset)
     end
@@ -60,6 +45,23 @@ defmodule RumblWeb.VideoController do
 
     conn
     |> put_flash(:info, "Video deleted successfully.")
-    |> redirect(to: video_path(conn, :index))
+    |> redirect(to: Routes.video_path(conn, :index))
+  end
+
+  def new(conn, _params, current_user) do
+    changeset = Multimedia.change_video(current_user, %Video{})
+    render(conn, "new.html", changeset: changeset)
+  end
+
+  def create(conn, %{"video" => video_params}, current_user) do
+    case Multimedia.create_video(current_user, video_params) do
+      {:ok, video} ->
+        conn
+        |> put_flash(:info, "Video created successfully.")
+        |> redirect(to: Routes.video_path(conn, :show, video))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "new.html", changeset: changeset)
+    end
   end
 end

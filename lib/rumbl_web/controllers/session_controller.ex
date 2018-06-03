@@ -10,7 +10,7 @@ defmodule RumblWeb.SessionController do
       {:ok, conn} ->
         conn
         |> put_flash(:info, "Welcome back!")
-        |> redirect(to: page_path(conn, :index))
+        |> redirect(to: Routes.page_path(conn, :index))
 
       {:error, _reason, conn} ->
         conn
@@ -19,4 +19,9 @@ defmodule RumblWeb.SessionController do
     end
   end
 
+  def delete(conn, _) do
+    conn
+    |> RumblWeb.Auth.logout()
+    |> redirect(to: Routes.page_path(conn, :index))
+  end
 end

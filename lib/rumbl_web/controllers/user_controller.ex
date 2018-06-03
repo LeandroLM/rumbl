@@ -1,9 +1,18 @@
+#---
+# Excerpted from "Programming Phoenix 1.4",
+# published by The Pragmatic Bookshelf.
+# Copyrights apply to this code. It may not be used to create training material,
+# courses, books, articles, and the like. Contact us if you are in doubt.
+# We make no guarantees that this code is fit for any purpose.
+# Visit http://www.pragmaticprogrammer.com/titles/phoenix14 for more book information.
+#---
 defmodule RumblWeb.UserController do
   use RumblWeb, :controller
-  plug :authenticate_user when action in [:index, :show]
 
   alias Rumbl.Accounts
   alias Rumbl.Accounts.User
+
+  plug :authenticate_user when action in [:index, :show]
 
   def index(conn, _params) do
     users = Accounts.list_users()
@@ -26,7 +35,8 @@ defmodule RumblWeb.UserController do
         conn
         |> RumblWeb.Auth.login(user)
         |> put_flash(:info, "#{user.name} created!")
-        |> redirect(to: user_path(conn, :index))
+        |> redirect(to: Routes.user_path(conn, :index))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
