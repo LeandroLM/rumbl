@@ -9,8 +9,8 @@ defmodule RumblWeb.VideoController do
     apply(__MODULE__, action_name(conn), args)
   end
 
-  def index(conn, _params) do
-    videos = Multimidia.list_videos()
+  def index(conn, _params, current_user) do
+    videos = Multimidia.list_user_videos(current_user)
     render(conn, "index.html", videos: videos)
   end
 
@@ -30,19 +30,19 @@ defmodule RumblWeb.VideoController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    video = Multimidia.get_video!(id)
+  def show(conn, %{"id" => id}, current_user) do
+    video = Multimidia.get_user_video!(current_user, id)
     render(conn, "show.html", video: video)
   end
 
-  def edit(conn, %{"id" => id}) do
-    video = Multimidia.get_video!(id)
-    changeset = Multimidia.change_video(conn.assigns.current_user, video)
+  def edit(conn, %{"id" => id}, current_user) do
+    video = Multimidia.get_user_video!(current_user, id)
+    changeset = Multimidia.change_video(current_user, video)
     render(conn, "edit.html", video: video, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "video" => video_params}) do
-    video = Multimidia.get_video!(id)
+  def update(conn, %{"id" => id, "video" => video_params}, current_user) do
+    video = Multimidia.get_user_video!(current_user, id)
 
     case Multimidia.update_video(video, video_params) do
       {:ok, video} ->
@@ -54,8 +54,8 @@ defmodule RumblWeb.VideoController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    video = Multimidia.get_video!(id)
+  def delete(conn, %{"id" => id}, current_user) do
+    video = Multimidia.get_user_video!(current_user, id)
     {:ok, _video} = Multimidia.delete_video(video)
 
     conn
