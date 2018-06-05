@@ -1,5 +1,6 @@
 defmodule RumblWeb.VideoController do
   use RumblWeb, :controller
+  plug :load_categories when action in [:new, :create, :edit, :update]
 
   alias Rumbl.Multimidia
   alias Rumbl.Multimidia.Video
@@ -49,12 +50,12 @@ defmodule RumblWeb.VideoController do
   end
 
   def new(conn, _params, current_user) do
-    changeset = Multimedia.change_video(current_user, %Video{})
+    changeset = Multimidia.change_video(current_user, %Video{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"video" => video_params}, current_user) do
-    case Multimedia.create_video(current_user, video_params) do
+    case Multimidia.create_video(current_user, video_params) do
       {:ok, video} ->
         conn
         |> put_flash(:info, "Video created successfully.")
@@ -63,5 +64,9 @@ defmodule RumblWeb.VideoController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+  end
+
+  def load_categories(conn, _) do
+    assign(conn, :categories, Multimidia.list_alphabetical_categories({:name, :id}))
   end
 end
